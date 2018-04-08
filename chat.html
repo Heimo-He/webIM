@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket</title>
+</head>
+<style>
+    .sendBox { margin: 15px; }
+    .sendBox .input { width: 200px;height: 25px; }
+    .sendBox .button{ width: 60px;height: 25px; }
+</style>
+<body>
+    <div class="sendBox">
+        <input class="input" id="msg" />
+        <button class="button" type="button" onclick="send()">send</button>
+    </div>
+    <hr>
+    <div>
+        <ul id="chatMsg">
+
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="jquery.js"></script>
+<script>
+    var wsServer = 'ws://websocket_server_ip:9501';
+    var websocket = new WebSocket(wsServer);
+
+    //打开事件
+    websocket.onopen = function (evt) {
+        $("#chatMsg").append("<li style='color: green'>Connected to WebSocket server!</li>");
+    };
+
+    //关闭事件
+    websocket.onclose = function (evt) {
+        $("#chatMsg").append("<li style='color: red'>Disconnected!</li>");
+    };
+
+    //消息事件
+    websocket.onmessage = function (evt) {
+        $("#chatMsg").prepend("<li style='color: blue'>new message:"+escapeHtml(evt.data)+"</li>");
+    };
+
+    //异常事件
+    websocket.onerror = function (evt, e) {
+        $("#chatMsg").append("<li style='color: red'>Error occured:"+evt.data+"</li>");
+    };
+
+    //发送消息
+    function send() {
+        var msg = $('#msg').val();
+	if (msg.length/1024 > 1 || msg.length == 0){
+            alert('消息内容不符合规范');        
+	}else {
+            websocket.send(msg);
+	    $('#msg').val('');
+        }
+    }
+
+    document.onkeydown = function(e){
+        var ev = document.all ? window.event : e;
+        if(ev.keyCode==13) {
+            send();
+            $('#msg').val('');
+        }
+    }
+
+    //过滤
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
+</script>
+</html>
