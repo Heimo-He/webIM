@@ -18,7 +18,7 @@ $ws->set(array(
 
 
 //创建websocket服务器对象，监听0.0.0.0:9502端口
-$ws = new swoole_websocket_server("0.0.0.0", 9501);
+$ws = new swoole_websocket_server("0.0.0.0", 9502);
 
 //监听WebSocket连接打开事件
 $ws->on('open', function ($ws, $request) {
@@ -29,10 +29,12 @@ $ws->on('open', function ($ws, $request) {
 
 //监听WebSocket消息事件
 $ws->on('message', function ($ws, $frame) {
-   foreach($ws->connections as $fd)
+    echo "client-{$frame->fd} send message：".$frame->data."\n";
+    foreach($ws->connections as $fd)
     {
+        echo "push message to client-{$fd} \n";
         $ws->push($fd, $frame->data);
-    } 
+    }
 });
 
 //监听WebSocket连接关闭事件
