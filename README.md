@@ -13,5 +13,3 @@
 `sudo php websocket_server.php`
 
 配置Nginx使用户能够访问到chat.html
-
-不同ip，设备上的浏览器可同时访问chat.html，实现即时聊天室
