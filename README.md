@@ -13,3 +13,5 @@
 `sudo php websocket_server.php`
 
 配置Nginx使用户能够访问到chat.html
+
+![image](https://github.com/Heimo-He/webIM/raw/master/screenshots/01.gif)
