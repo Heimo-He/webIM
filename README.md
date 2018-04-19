@@ -20,6 +20,6 @@
 
 3. 启动websocket_server
 
-`sudo php websocket_server.php`
+`php websocket_server.php`
 
 ![image](https://github.com/Heimo-He/webIM/raw/master/screenshots/01.gif)
